@@ -1,0 +1,28 @@
+html,
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+button {
+  border: none;
+  outline: none;
+  background-color: rgba(0,0,0,0);
+  cursor: pointer;
+}
