@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: '/Jin/',
+  base: '/portfolio/',
   routes: [
     {
       path: '/',
