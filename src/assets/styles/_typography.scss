@@ -1,0 +1,85 @@
+@import "_variables";
+
+@font-face {
+  src: url(../fonts/Goku.ttf);
+  font-family: "Goku";
+  font-weight: 400;
+}
+
+@font-face {
+  src: url(../fonts/roboto_light_300.woff2) format('woff2');
+  font-family: "Roboto";
+  font-weight: 300;
+}
+
+@font-face {
+  src: url(../fonts/roboto_bold_700.woff2) format('woff2');
+  font-family: "Roboto";
+  font-weight: 700;
+}
+
+html {
+  font-size: 10px; // base-font-size
+  min-width: 300px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.heading {
+  font-family: "Goku";
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: $text-black;
+}
+
+h1 {
+  font-size: $size-heading-xl;
+}
+h2 {
+  font-size: $size-heading-lg;
+}
+h4 {
+  font-size: $size-heading-sm;
+}
+h5 {
+  font-size: $size-heading-xs;
+}
+
+.has-text-center {
+  text-align: center;
+}
+
+.has-text-bold {
+  font-weight: 700;
+}
+
+$body-size-list: (
+  'xs': $size-body-xs, 
+  'sm': $size-body-sm, 
+  'md': $size-body-md,
+  'lg': $size-body-lg,
+  'xl': $size-body-xl,
+  'xxl': $size-body-xxl,
+  'huge': $size-body-huge
+);
+
+@each $size, $val in $body-size-list {
+  .has-text-size-#{$size} {
+    font-size: $val;
+  }
+}

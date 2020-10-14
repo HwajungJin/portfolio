@@ -1,0 +1,121 @@
+// colors
+$text-black: #343434;
+$text-red: #F04F50;
+$text-blue: #01B7FF;
+$text-purple: #832CC3;
+$text-pink: #E1438C;
+$text-grey: #A4A4A4;
+$text-white: #fff;
+$text-grey-dark: #707070;
+$background-white: #fff;
+$background-grey: #E8E1E1;
+$background-slight-grey: #F1F1F1;
+$background-light-grey: #F8F4F4;
+$scrollbar-bg: #EAEAEA;
+
+// ref colors
+$ref_01: #F1CD75;
+$ref_02: #F04F50;
+$ref_03: #832CC3;
+$ref_04: #01B7FF;
+$ref_05: #E1438C;
+
+:root {
+  --ref_01: #{$ref_01};
+  --ref_02: #{$ref_02};
+  --ref_03: #{$ref_03};
+  --ref_04: #{$ref_04};
+  --ref_05: #{$ref_05};
+}
+
+// font-sizes
+$size-heading-xxl: 11rem;
+$size-heading-xl: 10rem;
+$size-heading-lg: 9rem;
+$size-heading-sm: 3rem;
+$size-heading-xs: 2.5rem;
+
+$size-body-xs: 1rem;
+$size-body-sm: 1.2rem;
+$size-body-md: 1.5rem;
+$size-body-lg: 1.8rem;
+$size-body-xl: 2rem;
+$size-body-xxl: 2.2rem;
+$size-body-huge: 2.6rem;
+
+// z-index
+$zIndex-normal: 0;
+$zIndex-indicator: 10;
+$zIndex-modal: 20;
+
+// misc
+$page-side-padding: 8rem;
+$page-toolbar-height: 7rem;
+$page-min-width: 32rem;
+$content-side-padding: 18rem;
+
+// colors - misc
+$img-box-shadow: 0.5rem 0.5rem 0.5rem 0.5rem rgba(0,0,0,0.05);
+
+@mixin absoluteCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// mixins for media queries
+
+// breakpoints
+$phone-max-width: 440px;
+$tablet: 769px;
+$desktop: 1200px;
+$largescreen: 1600px;
+
+@mixin largescreen {
+  @media screen and (min-width: $largescreen) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: $desktop) {
+    @content;
+  }
+}
+
+@mixin touch {
+  @media screen and (max-width: $desktop - 1px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media screen and (max-width: $tablet - 1px) {
+    @content;
+  }
+}
+
+@mixin phoneblet {
+  @media screen and (min-width: $phone-max-width) {
+    @content;
+  }
+}
+
+@mixin till($bp) {
+  @media screen and (max-width: $bp) {
+    @content;
+  }
+}
+
+@mixin from($bp) {
+  @media screen and (min-width: $bp) {
+    @content;
+  }
+}
