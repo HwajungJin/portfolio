@@ -78,12 +78,15 @@ export default {
       )
     },
     trackAnimation () {
-      return gsap.from(
+      return gsap.fromTo(
         this.$refs.track,
+        {
+          height: '0%'
+        },
         {
           duration: 0.6,
           ease: 'power3.in',
-          height: '0%'
+          height: '100%'
         }
       )
     },
@@ -107,7 +110,7 @@ export default {
 .c-timeline {
   position: absolute;
   width: 0.3rem;
-  height: calc(100vh + 18rem);
+  height: calc(100 * var(--vh) + 18rem);
   border-radius: 0.3rem;
 
   .timeline__track {
@@ -177,7 +180,7 @@ export default {
     font-weight: 700;
     writing-mode: vertical-lr;
     transform: rotate(0deg) translateX(-10%);
-    bottom: 100.5vh;
+    bottom: calc(100.5 * var(--vh));
     overflow: hidden;
     
     > span {
@@ -201,7 +204,7 @@ export default {
   }
 
   @media screen and (min-height: 800px) {
-    height: calc(100vh + 24rem);
+    height: calc(100 * var(--vh) + 24rem);
 
     .timeline__text {
       font-size: 6.4rem;
@@ -213,7 +216,7 @@ export default {
   }
 
   @media screen and (min-height: 1100px) {
-    height: calc(100vh + 50rem);
+    height: calc(100 * var(--vh) + 50rem);
 
     .timeline__text {
       font-size: 8rem;
