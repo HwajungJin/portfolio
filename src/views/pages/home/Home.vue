@@ -177,14 +177,14 @@ export default {
 
 .c-timeline {
   left: 4rem;
-  top: calc(100vh - 18rem);
+  top: calc(100 * var(--vh) - 18rem);
 
   @include from(600px) {
     left: 10rem;
   }
 
   @include tablet {
-    top: calc(100vh - 18rem);
+    top: calc(100 * var(--vh) - 18rem);
     left: 20rem;
   }
 
@@ -201,11 +201,11 @@ export default {
   }
 
   @media screen and (min-height: 800px) {
-    top: calc(100vh - 24rem);
+    top: calc(100 * var(--vh) - 24rem);
   }
 
   @media screen and (min-height: 1100px) {
-    top: calc(100vh - 50rem);
+    top: calc(100 * var(--vh) - 50rem);
   }
 }
 
