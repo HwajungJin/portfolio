@@ -86,6 +86,12 @@ export default {
       this.inspectRoute()
     }
   },
+  created () {
+    console.log('------------')
+    console.log('Designed by Web Designer, HwaJung Jin')
+    console.log('hajoung222@gmail.com')
+    console.log('------------')
+  },
   mounted () {
     Bus.$on(eventList.openModal, this.openModal)
     Bus.$on(eventList.closeModal, this.closeModal)

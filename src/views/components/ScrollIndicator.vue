@@ -1,11 +1,27 @@
 <template lang='pug'>
-.c-scroll-indicator
+.c-scroll-indicator(
+  ref='el'
+)
   .bar
 </template>
 
 <script>
+import gsap from 'gsap'
+
 export default {
-  name: 'ScrollIndicator'
+  name: 'ScrollIndicator',
+  methods: {
+    revealAnimation () {
+      return gsap.from(
+        this.$refs.el,
+        {
+          duration: 0.3,
+          ease: 'power3.out',
+          opacity: 0
+        }
+      )
+    }
+  }
 }
 </script>
 

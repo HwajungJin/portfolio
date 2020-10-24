@@ -25,6 +25,7 @@
       text-align: center;
     }
   }
+
   &__para {
     margin-bottom: 2rem;
 
@@ -182,7 +183,7 @@
 
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   border-bottom: 1px solid $background-grey;
 

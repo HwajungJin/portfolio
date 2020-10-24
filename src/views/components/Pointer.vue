@@ -2,6 +2,7 @@
 span.c-pointer
   span.c-pointer--circle(
     :class="{ 'is-clicked': isClicked }"
+    @animationend="$emit('pointer-click')"
   )
   span.c-pointer--triangle
   span.c-pointer--bar
@@ -50,7 +51,7 @@ export default {
     opacity: 0;
 
     &.is-clicked {
-      animation: pointerClicked 0.9s ease-in forwards;
+      animation: pointerClicked 0.65s ease-in forwards;
     }
   }
 
@@ -81,6 +82,9 @@ export default {
     opacity: 1;
     width: 0;
     height: 0;
+  }
+  30% {
+    opacity: 1;
   }
   100% {
     opacity: 0.02;

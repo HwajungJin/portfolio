@@ -1,7 +1,16 @@
 <template lang='pug'>
 .c-timeline
-  .timeline__btn
-  .timeline__text.heading 2020
+  .timeline__track(
+    ref='track'
+  )
+  .timeline__btn(
+    ref='button'
+    :class="{ 'show-text': showStartText }"
+  )
+  .timeline__text.heading
+    span(
+      ref='heading'
+    ) 2020
   .timeline__container
     timeline-item
       svg.c-hello-text(
@@ -34,12 +43,60 @@
 </template>
 
 <script>
+import gsap from 'gsap'
 import TimelineItem from './TimelineItem.vue'
 
 export default {
   name: 'Timeline',
+  data () {
+    return {
+      showStartText: false
+    }
+  },
   components: {
     TimelineItem
+  },
+  methods: {
+    timelineAnimation () {
+      return gsap.timeline()
+        .add( this.buttonAnimation() )
+        .addLabel('button-ani-end')
+        .add( this.trackAnimation(), "button-ani-end")
+        .add( this.headingAnimation(), "button-ani-end")
+    },
+    buttonAnimation () {
+      return gsap.from(
+        this.$refs.button,
+        {
+          duration: 0.5,
+          ease: 'back.out(1.45)',
+          scale: 0,
+          onComplete: () => {
+            this.showStartText = true
+          }
+        }
+      )
+    },
+    trackAnimation () {
+      return gsap.from(
+        this.$refs.track,
+        {
+          duration: 0.6,
+          ease: 'power3.in',
+          height: '0%'
+        }
+      )
+    },
+    headingAnimation () {
+      return gsap.from(
+        this.$refs.heading,
+        {
+          duration: 0.5,
+          ease: 'power2.out',
+          x: '-110%'
+        }
+      )
+    }
   }
 }
 </script>
@@ -52,7 +109,16 @@ export default {
   width: 0.3rem;
   height: calc(100vh + 18rem);
   border-radius: 0.3rem;
-  background-color: $text-red;
+
+  .timeline__track {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: $text-red;
+  }
 
   .timeline__btn {
     position: absolute;
@@ -63,6 +129,12 @@ export default {
     height: 1.6rem;
     border-radius: 1.6rem;
     background-color: $text-red;
+
+    &.show-text::after {
+      margin-left: 2rem;
+      opacity: 1;
+      transition: all 0.25s ease-out;
+    }
   }
   .timeline__btn::before {
     content: '';
@@ -82,7 +154,8 @@ export default {
     position: relative;
     font-size: $size-body-lg;
     letter-spacing: 1px;
-    margin-left: 2rem;
+    margin-left: 0;
+    opacity: 0;
 
     @include largescreen {
       font-size: $size-body-xxl;
@@ -105,6 +178,12 @@ export default {
     writing-mode: vertical-lr;
     transform: rotate(0deg) translateX(-10%);
     bottom: 100.5vh;
+    overflow: hidden;
+    
+    > span {
+      display: inline-block;
+      position: relative;
+    }
   }
 
   .timeline__container {

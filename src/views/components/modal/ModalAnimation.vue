@@ -42,7 +42,13 @@ export default {
       })
     },
     triggerWrapAnimation () {
-      this.currentAnimationName = 'wrap-layer'
+      return new Promise(resolve => {
+        this.currentAnimationName = 'wrap-layer'
+
+        window.setTimeout(() => {
+          resolve('animation-done')
+        }, this.duration + 50)
+      })
     }
   },
   created () {
@@ -50,10 +56,9 @@ export default {
     this.currentPageNumber = currentPageNumber
   },
   mounted () {
-
     this.adjustLayerDimension()
-    this.resizeHandlerDebounced = debounce(this.adjustLayerDimension, 30)
 
+    this.resizeHandlerDebounced = debounce(this.adjustLayerDimension, 30)
     window.addEventListener('resize', this.resizeHandlerDebounced)
   },
   beforeDestroy () {
