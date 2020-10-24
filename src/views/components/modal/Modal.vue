@@ -11,7 +11,7 @@
     )
 
     close-button.c-close-button(
-      @click='closeModal'
+      @click='onCloseButtonClick'
     )
 
   modal-animation(
@@ -46,30 +46,31 @@ export default {
     ModalAnimation
   },
   methods: {
-    closeModal (callback) {
+    closeModal (callback = null) {
       this.$refs.modalAnimation.triggerWrapAnimation()
+        .then(() => {
+          Bus.$emit(eventList.closeModal)
+          callback && callback()
+        })
 
       window.setTimeout(() => {
         this.showModalContent = false
       }, this.aniDuration/2)
-
-      window.setTimeout(() => {
-        Bus.$emit(eventList.closeModal)
-        callback && callback()
-      }, this.aniDuration + 100)
-      // Bus.$emit(eventList.closeModal)
     },
     navigateTo (routeName) {
-      const callbackToPass = () => {
-        Bus.$emit(eventList.toScrollTop)
-      }
-  
-      this.closeModal(callbackToPass)
-      window.setTimeout(() => {
-        this.$router.push({
-          name: routeName
-        })
-      }, this.aniDuration/2)
+      this.$router.push(
+        { name: routeName },
+        () => {
+          Bus.$emit(eventList.toScrollTop)
+          
+          window.setTimeout(() => {
+            this.closeModal()
+          }, 15)
+        }
+      )
+    },
+    onCloseButtonClick () {
+      this.closeModal()
     }
   },
   mounted () {
@@ -105,15 +106,17 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  visibility: hidden;
   background-color: $background-white;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
 
   &.is-visible {
-    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   @include from(1000px) {

@@ -1,33 +1,73 @@
 <template lang='pug'>
-.c-string-typer {{ string }}
+.c-string-typer(
+  :class="{ 'is-cursor-hidden': hideCursor }"
+) {{ currentText }}
 </template>
 
 <script>
+import gsap from 'gsap'
+
 export default {
-   name: 'StringTyper',
-   data () {
-     return {
-       currentText: ''
-     }
-   },
-   props: {
-     string: {
-       type: String,
-       required: true
-     },
-     aniOff: {
-       type: Boolean,
-        default: false
-     },
-     aniDelay: {
-       type: Number,
-       default: 0
-     },
-     durationBetween: {
-       type: Number,
-       default: 50
-     }
-   }
+  name: 'StringTyper',
+  data () {
+    return {
+      timeline: null,
+      currentTrimPoint: 0,
+      currentTrimPointMax: 0,
+      hideCursor: true
+    }
+  },
+  computed: {
+    currentText () {
+      return this.string.slice(
+        0,
+        Math.round(this.currentTrimPoint)
+      )
+    }
+  },
+  props: {
+    string: {
+      type: String,
+      required: true
+    },
+    immediateRender: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    aniDelay: {
+      type: Number,
+      default: 0
+    },
+    duration: {
+      type: Number,
+      default: 1
+    }
+  },
+  methods: {
+    initializeAnimation () {
+      return gsap.timeline()
+        .to(
+          this.$data,
+          {
+            currentTrimPoint: this.currentTrimPointMax,
+            duration: this.duration,
+            ease: 'none',
+            onStart: () => {
+              this.hideCursor = false
+            }
+          }
+        )
+    }
+  },
+  mounted () {
+    this.currentTrimPointMax = this.string.length
+    
+    if (this.immediateRender) {
+      this.currentTrimPoint = this.currentTrimPointMax
+      this.hideCursor = false
+    }
+  }
 }
 </script>
 
@@ -41,6 +81,10 @@ export default {
   font-size: $size-body-xl;
   color: $text-black;
 
+  &.is-cursor-hidden::after {
+    display: none;
+  }
+
   &::after {
     content: '';
     display: inline-block;
@@ -49,6 +93,13 @@ export default {
     margin-left: 0.3rem;
     margin-bottom: -0.2rem;
     background-color: $text-red;
+    // animation: flickeringCursor 0.4s steps(1) infinite alternate;
   }
+}
+
+@keyframes flickeringCursor {
+  0%{ opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 </style>

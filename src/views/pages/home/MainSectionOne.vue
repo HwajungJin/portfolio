@@ -1,35 +1,59 @@
 <template lang='pug'>
 .main-section
-  .c-header
-    .header-container
-      a.link(@click="$emit('scroll-to', 'about')") About
-      span.header__line
-      a.link(@click="$emit('scroll-to', 'work')") Works
-      span.header__line
-      a.link(@click="$emit('scroll-to', 'contact')") Contact me
+  background-animation(
+    ref='bgAnimation'
+    @bg-animation-done='playMainTextAnimation'
+    @color-palette-animation-done='playToolRevealAnimation'
+  )
+  
+  template
+    .c-header(
+      ref='header'
+    )
+      .header-container
+        a.link(@click="$emit('scroll-to', 'about')") About
+        span.header__line
+        a.link(@click="$emit('scroll-to', 'work')") Works
+        span.header__line
+        a.link(@click="$emit('scroll-to', 'contact')") Contact me
 
-  .c-content-container
-    .introduction
-      string-typer.c-hi-text(
-        string="Hi, I'm Jin"
+    .c-content-container
+      .introduction
+        string-typer.c-hi-text(
+          ref='stringTyper'
+          string="Hi, I'm Jin"
+          :duration='0.75'
+        )
+
+        .c-profession(
+          ref='profession'
+        )
+          span.featureline
+          span.profession-title UI / Graphic Designer
+
+      main-title.c-main-title(
+        ref='mainTitle'
       )
 
-      .c-profession
-        span.featureline
-        span.profession-title UI Designer / Art Director
+      text-cloud.c-welcome-cloud(
+        v-if='false'
+        ref='textCloud'
+        :isUpsideDown="!isDesktop"
+      )
 
-    main-title.c-main-title
-
-    text-cloud.c-welcome-cloud(
-      :isUpsideDown="!isDesktop"
+    hamburger-icon.c-menuicon(
+      ref='hamburger'
     )
-
-  hamburger-icon.c-menuicon
-  
-  scroll-indicator.c-scroll-indicator
+    
+    scroll-indicator.c-scroll-indicator(
+      ref='scrollIndicator'
+    )
 </template>
 
 <script>
+import gsap from 'gsap'
+
+import BackgroundAnimation from './HomeAnimationNew.vue'
 import ScrollIndicator from '@components/ScrollIndicator.vue'
 import HamburgerIcon from '@components/hamburgerIcon.vue'
 import MainTitle from './HomeMainTitle.vue'
@@ -38,7 +62,14 @@ import StringTyper from '@components/stringTyper.vue'
 
 export default {
   name: 'MainSectionOne',
+  data () {
+    return {
+      masterTimeline: null,
+      toolTimeline: null
+    }
+  },
   components: {
+    BackgroundAnimation,
     ScrollIndicator,
     HamburgerIcon,
     MainTitle,
@@ -48,6 +79,83 @@ export default {
   computed: {
     isDesktop () {
       return ['tabletop', 'desktop', 'largescreen'].includes(this.$mq)
+    },
+    immediateRender () {
+      return this.$root.$data.shared.introAnimationDisabled
+    }
+  },
+  methods: {
+    registerAnimations () {
+      this.masterTimeline = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          !this.immediateRender &&
+            this.playColorPaletteAnimation()
+        }
+      })
+        .add( this.$refs.mainTitle.initializeAnimation() )
+        .add( this.$refs.stringTyper.initializeAnimation(), "+=0.4" )
+        .add( this.professionAnimation(), "+=0.2" )
+        // .add( this.$refs.textCloud.initializeAnimation(), "+=0.4" )
+    
+      this.toolTimeline = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          !this.immediateRender &&
+            this.$emit('tool-animation-done')
+        }
+      })
+        .add( this.hamburgerAnimation(), 0)
+        .add( this.headerAnimation(), 0)
+    },
+    professionAnimation () {
+      return gsap.from(
+        this.$refs.profession.querySelectorAll('span'),
+        {
+          duration: 0.6,
+          y: '-4rem',
+          ease: 'power3.out'
+        }
+      )
+    },
+    hamburgerAnimation () {
+      return gsap.from(
+        this.$refs.hamburger.$el,
+        {
+          duration: 0.6,
+          x: '-2.5rem',
+          opacity: 0,
+          ease: 'power4.in'
+        }
+      )
+    },
+    headerAnimation () {
+      return gsap.from(
+        this.$refs.header,
+        {
+          duration: 0.6,
+          x: '2.5rem',
+          opacity: 0,
+          ease: 'power4.in'
+        }
+      )
+    },
+    playMainTextAnimation () {
+      this.masterTimeline.play()
+    },
+    playColorPaletteAnimation () {
+      this.$refs.bgAnimation.colorPaletteTimeline.play()
+    },
+    playToolRevealAnimation () {
+      this.toolTimeline.play()
+    }
+  },
+  mounted () {
+    this.registerAnimations()
+
+    if (this.immediateRender) {
+      this.masterTimeline.progress(1)
+      this.toolTimeline.progress(1)
     }
   }
 }
@@ -222,6 +330,11 @@ export default {
   align-items: flex-start;
   margin-top: 0.6rem;
   margin-bottom: 1rem;
+  overflow: hidden;
+
+  > * {
+    position: relative;
+  }
 
   .featureline {
     display: inline-block;

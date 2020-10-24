@@ -1,5 +1,7 @@
 <template lang='pug'>
-.section-indicator
+.section-indicator(
+  ref='sectionIndicator'
+)
   .section-indicator__box
   .section-indicator__row(
     v-for="(sectionName, index) in sectionList"
@@ -10,7 +12,9 @@
     span.text {{ sectionName }}
 </template>
 
-<script>
+<script> 
+import gsap from 'gsap'
+
 export default {
   name: 'SectionIndicator',
   data () {
@@ -25,6 +29,19 @@ export default {
   props: {
     activeSection: {
       type: String
+    }
+  },
+  methods: {
+    revealAnimation () {
+       return gsap.from(
+        this.$refs.sectionIndicator,
+        {
+          duration: 0.6,
+          ease: 'power3.out',
+          opacity: 0,
+          x: '-2rem'
+        }                                       
+      )
     }
   }
 }

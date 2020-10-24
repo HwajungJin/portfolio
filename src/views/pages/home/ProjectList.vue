@@ -56,13 +56,15 @@ export default {
           isCommercial: false ,
           number: 4,
           route: 'Fourth'
-        },
+        }
+        /*
         { 
           projectName: 'Flip',
           isCommercial: false,
           number: 5,
           route: 'Fifth'
         }
+        */
       ]
     }
   },

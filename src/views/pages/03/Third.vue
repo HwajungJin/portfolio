@@ -744,6 +744,7 @@ export default {
   }
 
   .grid-decoration {
+    display: none;
     $grid-color: $text-grey;
     $transparent: rgba(0,0,0,0);
 

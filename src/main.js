@@ -9,5 +9,17 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  data () {
+    return {
+      shared: {
+        introAnimationDisabled: false
+      }
+    }
+  },
+  methods: {
+    disableIntroAnimation () {
+      this.shared.introAnimationDisabled = true
+    }
+  },
   render: h => h(App),
 }).$mount('#app')

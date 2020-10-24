@@ -1,7 +1,13 @@
 <template lang="pug">
-.c-home-main-title
-  .c-text-container 
-    h3.text.heading My Portfolio.
+.c-home-main-title(
+  ref='mainContainerEl'
+)
+  .c-text-container(
+    ref='textContainerEl'
+  )
+    h3.text.heading(
+      ref='textEl'
+    ) My Portfolio.
 
   span.c-dot--inner(
     v-for="corner in corners"
@@ -16,9 +22,17 @@
   )
 
   pointer.c-pointer
+
+  template(v-if='!hideAssistantLines')
+    .c-assistant-line(
+      v-for="orientation in ['top', 'left', 'bottom', 'right']"
+      :key='orientation'
+      :class="'is-' + orientation"
+    )
 </template>
 
 <script>
+import gsap from 'gsap'
 import Pointer from '@components/Pointer.vue'
 
 export default {
@@ -33,7 +47,45 @@ export default {
         'topright',
         'bottomleft',
         'bottomright'
-      ]
+      ],
+      aniDone: false,
+      hideAssistantLines: true
+    }
+  },
+  computed: {
+    isPhone () {
+      return ['small', 'phone'].includes(this.$mq)
+    }
+  },
+  methods: {
+    initializeAnimation () {
+      const { 
+        mainContainerEl
+      } = this.$refs
+
+      return gsap.timeline()
+      .fromTo(
+        mainContainerEl,
+        {
+          scaleX: 0,
+          scaleY: 0
+        },
+        {
+          transformOrigin: 'left top',
+          scaleX: 1,
+          scaleY: 1,
+          duration: 0.8,
+          delay: 0.5,
+          ease: "power2.out",
+          onStart: () => {
+            this.hideAssistantLines = false
+          },
+          onComplete: () => {
+            window.addEventListener('resize', this.resizeHandler)
+            this.hideAssistantLines = true
+          }
+        }
+      )
     }
   }
 }
@@ -45,6 +97,7 @@ export default {
 .c-home-main-title {
   position: relative;
   border: 1px solid $text-black;
+  box-sizing: border-box;
   color: $text-black;
   padding: 2rem;
   width: min-content;
@@ -181,5 +234,42 @@ export default {
   position: absolute;
   bottom: 0%;
   right: 0%;
+}
+
+.c-assistant-line {
+  position: absolute;
+  --line-color: #{$text-black};
+
+  &.is-top,
+  &.is-bottom {
+    left: 50%;
+    width: 1px;
+    height: 100vh;
+    border-left: 1px dashed var(--line-color);
+  }
+  &.is-top {
+    top: 0;
+    transform: translate3d(0,-100%, 0);
+  }
+  &.is-bottom {
+    bottom: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  &.is-left,
+  &.is-right {
+    top: 50%;
+    width: 100vw;
+    height: 1px;
+    border-top: 1px dashed var(--line-color)
+  }
+  &.is-left {
+    left: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  &.is-right {
+    right: 0;
+    transform: translate3d(100%, 0, 0);
+  }
 }
 </style>
