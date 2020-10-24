@@ -79,6 +79,9 @@ export default {
     },
     updatePageNumber (pageNumber) {
       this.currentPageNumber = pageNumber
+    },
+    setVhValue () {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight / 100}px`)
     }
   },
   watch: {
@@ -101,6 +104,9 @@ export default {
 
     this.measureBrowserScrollbarWidth()
     this.inspectRoute()
+
+    window.addEventListener('resize', this.setVhValue)
+    this.setVhValue()
   },
   beforeDestroy () {
     Bus.$off(eventList.openModal, this.openModal)
@@ -108,6 +114,8 @@ export default {
     Bus.$off(eventList.toScrollTop, this.toScrollTop)
     Bus.$off(eventList.scrollBarMove, this.scrollTo)
     Bus.$off(eventList.updatePageNumber, this.updatePageNumber)
+
+    window.removeEventListener('resize', this.setVhValue)
   }
 }
 </script>
@@ -117,7 +125,7 @@ export default {
 .c-app {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: calc(100 * var(--vh, 1vh));
   overflow-y: auto;
   overflow-x: hidden;
 
